@@ -66,6 +66,7 @@ export class TaskQueue {
       name: this.options.name,
       active: this.active,
       waiting: this.waiting.length,
+      retrying: this.backingOff,
       concurrency: this.options.concurrency,
     };
   }

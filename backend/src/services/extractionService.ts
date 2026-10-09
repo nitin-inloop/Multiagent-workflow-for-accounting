@@ -75,4 +75,36 @@ export class ExtractionService {
     }
   }
 
+  async extract(input: ExtractionInput): Promise<ExtractionOutcome> {
+    if (input.demoSlug) {
+      const demo = findDemoInvoice(input.demoSlug);
+      if (demo) {
+        return {
+          engine: 'DEMO_FALLBACK',
+          fields: structuredClone(demo.fields),
+          confidence: demo.confidence,
+          explanation: demo.teaches,
+          notes: ['Seeded demo invoice: extraction values are fixed.'],
+          failed: false,
+        };
+      }
+    }
+
+    if (this.canRunParallel) {
+      return this.extractInParallel(input);
+    }
+
+    if (this.textract) {
+      return this.extractWithTextract(input);
+    }
+
+    if (this.gemini) {
+      return this.extractWithVision(input, []);
+    }
+
+    return this.sampleFallback(input.fileHash, [
+      'No extraction service is configured, so a representative sample extraction was used for this file.',
+    ]);
+  }
+
 // PLACEHOLDER_BODY

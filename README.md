@@ -20,6 +20,7 @@ untouched.
   <a href="#5-the-interface">Interface</a> ·
   <a href="#6-architecture">Architecture</a> ·
   <a href="#7-run-locally">Run locally</a> ·
+  <a href="#8-configuration">Configuration</a> ·
   <a href="#9-api">API</a> ·
   <a href="#10-demo-scenarios">Demo</a>
 </p>
@@ -552,12 +553,6 @@ flowchart TB
 | Layer | Choice | Why it is here |
 | --- | --- | --- |
 | Frontend | Next.js 16, React 19, Tailwind 4, lucide-react | The inbox polls while documents process, so both pages are client-rendered |
-| API | Express 4, TypeScript 5, Zod | Zod validates both inbound requests and every model response |
-| Upload | multer, memory storage, 15 MB cap | Bytes are hashed and stored before anything reads them |
-| Extraction | `@aws-sdk/client-textract` | `AnalyzeExpense` returns labelled expense fields, not raw text |
-| Model access | plain `fetch` to the Generative Language API | One API key, no SDK, no cloud credential chain |
-| Validation | hand-written TypeScript | The verdict must be auditable and reproducible, so no model touches it |
-| Export | generated Tally XML + CSV | Tally is what the target firms actually post into |
 | API | Express 4, TypeScript 5, Zod | Zod validates both inbound requests and every model response |
 | Upload | multer, memory storage, 15 MB cap | Bytes are hashed and stored before anything reads them |
 | Extraction | `@aws-sdk/client-textract` | `AnalyzeExpense` returns labelled expense fields, not raw text |

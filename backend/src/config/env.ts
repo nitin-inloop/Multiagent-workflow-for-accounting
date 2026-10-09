@@ -23,6 +23,25 @@ const envSchema = z.object({
   AWS_REGION: z.string().default('us-east-1'),
   S3_BUCKET: z.string().optional(),
   DYNAMODB_TABLE: z.string().optional(),
+  /**
+   * SDK attempts per AWS call. The default chain of three plus backoff means a
+   * dead credential costs ten seconds before the pipeline can fall back, and a
+   * fallback that arrives late is worse than one that arrives at once.
+   */
+  AWS_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(5).default(2),
+  /** Hard ceiling on one Textract call, fallback included. */
+  TEXTRACT_TIMEOUT_MS: z.coerce.number().int().positive().default(20_000),
+
+  /** How many documents the agent reads at once. Above this they queue. */
+  EXTRACTION_CONCURRENCY: z.coerce.number().int().min(1).max(32).default(4),
+  /** Tries per document, including the first, for transient faults. */
+  EXTRACTION_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(5).default(2),
+  /**
+   * "true" reads with Textract and Gemini vision at the same time and merges
+   * the two, which costs one round-trip of wall clock instead of two and lets
+   * the engines cross-check each other. "false" restores the older chain.
+   */
+  ENABLE_PARALLEL_EXTRACTION: toggle,
 
   /** Gemini is the model provider: one API key, no cloud credential chain. */
   GEMINI_API_KEY: z.string().optional(),

@@ -52,6 +52,15 @@ const envSchema = z.object({
    * field so the model applies its own default.
    */
   GEMINI_THINKING_LEVEL: z.enum(['off', 'minimal', 'low', 'medium', 'high']).default('low'),
+  /**
+   * Per-call ceilings. Reading a scan is slower than tidying fields that are
+   * already extracted, so the two paths do not deserve the same budget: one
+   * flat 60s timeout only means a stuck call holds a queue slot for a minute.
+   */
+  GEMINI_VISION_TIMEOUT_MS: z.coerce.number().int().positive().default(30_000),
+  GEMINI_NORMALIZE_TIMEOUT_MS: z.coerce.number().int().positive().default(15_000),
+  /** Extra tries for a 429 or a 503, which are both worth one quick retry. */
+  GEMINI_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(4).default(2),
 
   /** "auto" enables Textract only when AWS credentials look reachable. */
   ENABLE_TEXTRACT: toggle,
@@ -122,6 +131,8 @@ export const config = {
     region: raw.AWS_REGION,
     s3Bucket: raw.S3_BUCKET,
     dynamoTable: raw.DYNAMODB_TABLE,
+    maxAttempts: raw.AWS_MAX_ATTEMPTS,
+    textractTimeoutMs: raw.TEXTRACT_TIMEOUT_MS,
     credentialsPresent,
   },
 
@@ -129,6 +140,14 @@ export const config = {
     apiKey: raw.GEMINI_API_KEY,
     model: raw.GEMINI_MODEL,
     thinkingLevel: raw.GEMINI_THINKING_LEVEL,
+    visionTimeoutMs: raw.GEMINI_VISION_TIMEOUT_MS,
+    normalizeTimeoutMs: raw.GEMINI_NORMALIZE_TIMEOUT_MS,
+    maxAttempts: raw.GEMINI_MAX_ATTEMPTS,
+  },
+
+  extraction: {
+    concurrency: raw.EXTRACTION_CONCURRENCY,
+    maxAttempts: raw.EXTRACTION_MAX_ATTEMPTS,
   },
 
   localStorageDir: raw.LOCAL_STORAGE_DIR,

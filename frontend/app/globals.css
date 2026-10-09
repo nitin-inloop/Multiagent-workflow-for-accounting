@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/*
+ * LedgerFlow surface: green-bar continuous-feed accounting paper.
+ * Deliberately light-only. A ledger is paper, and accountants read these
+ * screens next to a printout, so a dark variant would fight the metaphor.
+ */
+:root {
+  --paper: #f4f6f2;
+  --paper-raised: #fbfcfa;
+  --bar: #e6ede3;
+  --rule: #ccd8c8;
+  --rule-strong: #a8b8a4;
+
+  --ink: #101a16;
+  --ink-soft: #46554d;
+  --ink-faint: #7d8a83;
+
+  --stamp: #ad3520;
+  --stamp-wash: #f7e6e1;
+  --ochre: #8a6414;
+  --ochre-wash: #f6eedb;
+  --ledger: #1c5a43;
+  --ledger-wash: #e2eee8;
+  --ready: #1b4a6b;
+  --ready-wash: #e3ecf3;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-bar: var(--bar);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-stamp: var(--stamp);
+  --color-stamp-wash: var(--stamp-wash);
+  --color-ochre: var(--ochre);
+  --color-ochre-wash: var(--ochre-wash);
+  --color-ledger: var(--ledger);
+  --color-ledger-wash: var(--ledger-wash);
+  --color-ready: var(--ready);
+  --color-ready-wash: var(--ready-wash);
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Figures line up in columns, the way they do on a printout. */
+  [data-figure] {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--ledger-wash);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+}
+
+@layer components {
+  /* Eyebrow labels: the printed column headings of a ledger sheet. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* Alternating green bars, drawn on the container so rows stay hairline-thin. */
+  .green-bar > *:nth-child(odd) {
+    background-color: color-mix(in srgb, var(--bar) 62%, transparent);
+  }
+
+  .rule-t {
+    border-top: 1px solid var(--rule);
+  }
+
+  .rule-b {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Feed-in: rows arrive like paper advancing through a printer. */
+  @keyframes feed {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .feed {
+    animation: feed 340ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  /* The tractor-feed perforation strip down the left edge of the sheet. */
+  .perforation {
+    background-image: radial-gradient(circle at center, var(--rule) 1.4px, transparent 1.5px);
+    background-size: 10px 22px;
+    background-repeat: repeat-y;
+    background-position: center top;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

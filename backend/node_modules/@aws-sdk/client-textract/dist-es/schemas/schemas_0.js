@@ -1,0 +1,1075 @@
+const _A = "Adapter";
+const _AC = "AdaptersConfig";
+const _ACT = "AfterCreationTime";
+const _AD = "AnalyzeDocument";
+const _ADE = "AccessDeniedException";
+const _ADMV = "AnalyzeDocumentModelVersion";
+const _ADR = "AnalyzeDocumentRequest";
+const _ADRn = "AnalyzeDocumentResponse";
+const _AE = "AnalyzeExpense";
+const _AEMV = "AnalyzeExpenseModelVersion";
+const _AER = "AnalyzeExpenseRequest";
+const _AERn = "AnalyzeExpenseResponse";
+const _AI = "AdapterId";
+const _AID = "AnalyzeID";
+const _AIDD = "AnalyzeIDDetections";
+const _AIDMV = "AnalyzeIDModelVersion";
+const _AIDR = "AnalyzeIDRequest";
+const _AIDRn = "AnalyzeIDResponse";
+const _AL = "AdapterList";
+const _ALMV = "AnalyzeLendingModelVersion";
+const _AN = "AdapterName";
+const _AO = "AdapterOverview";
+const _AU = "AutoUpdate";
+const _AV = "AdapterVersion";
+const _AVDC = "AdapterVersionDatasetConfig";
+const _AVEM = "AdapterVersionEvaluationMetric";
+const _AVEMd = "AdapterVersionEvaluationMetrics";
+const _AVL = "AdapterVersionList";
+const _AVO = "AdapterVersionOverview";
+const _AVd = "AdapterVersions";
+const _Ad = "Adapters";
+const _Al = "Alias";
+const _B = "Baseline";
+const _BB = "BoundingBox";
+const _BCT = "BeforeCreationTime";
+const _BDE = "BadDocumentException";
+const _BL = "BlockList";
+const _BT = "BlockType";
+const _Bl = "Blocks";
+const _Blo = "Block";
+const _Bu = "Bucket";
+const _By = "Bytes";
+const _C = "Code";
+const _CA = "CreateAdapter";
+const _CAR = "CreateAdapterRequest";
+const _CARr = "CreateAdapterResponse";
+const _CAV = "CreateAdapterVersion";
+const _CAVR = "CreateAdapterVersionRequest";
+const _CAVRr = "CreateAdapterVersionResponse";
+const _CC = "ContentClassifiers";
+const _CE = "ConflictException";
+const _CI = "ColumnIndex";
+const _CRT = "ClientRequestToken";
+const _CS = "ColumnSpan";
+const _CT = "CreationTime";
+const _Co = "Confidence";
+const _Cu = "Currency";
+const _D = "Document";
+const _DA = "DataAttributes";
+const _DAR = "DeleteAdapterRequest";
+const _DARe = "DeleteAdapterResponse";
+const _DAV = "DeleteAdapterVersion";
+const _DAVR = "DeleteAdapterVersionRequest";
+const _DAVRe = "DeleteAdapterVersionResponse";
+const _DAe = "DeleteAdapter";
+const _DC = "DatasetConfig";
+const _DDT = "DetectDocumentText";
+const _DDTMV = "DetectDocumentTextModelVersion";
+const _DDTR = "DetectDocumentTextRequest";
+const _DDTRe = "DetectDocumentTextResponse";
+const _DG = "DocumentGroup";
+const _DGL = "DocumentGroupList";
+const _DGo = "DocumentGroups";
+const _DI = "DocumentIndex";
+const _DL = "DocumentLocation";
+const _DM = "DocumentMetadata";
+const _DP = "DocumentPages";
+const _DS = "DetectedSignature";
+const _DSL = "DetectedSignatureList";
+const _DSe = "DetectedSignatures";
+const _DTLE = "DocumentTooLargeException";
+const _De = "Description";
+const _E = "Extraction";
+const _EC = "ExpenseCurrency";
+const _ECr = "ErrorCode";
+const _ED = "ExpenseDocuments";
+const _EDL = "ExpenseDocumentList";
+const _EDx = "ExpenseDetection";
+const _EDxp = "ExpenseDocument";
+const _EF = "ExpenseField";
+const _EFL = "ExpenseFieldList";
+const _EGP = "ExpenseGroupProperty";
+const _EGPL = "ExpenseGroupPropertyList";
+const _EI = "ExpenseIndex";
+const _EL = "ExtractionList";
+const _EM = "EvaluationMetric";
+const _EMv = "EvaluationMetrics";
+const _ET = "EntityTypes";
+const _ETx = "ExpenseType";
+const _Ex = "Extractions";
+const _FDA = "FlowDefinitionArn";
+const _FS = "F1Score";
+const _FT = "FeatureTypes";
+const _FTe = "FeatureType";
+const _G = "Geometry";
+const _GA = "GetAdapter";
+const _GAR = "GetAdapterRequest";
+const _GARe = "GetAdapterResponse";
+const _GAV = "GetAdapterVersion";
+const _GAVR = "GetAdapterVersionRequest";
+const _GAVRe = "GetAdapterVersionResponse";
+const _GDA = "GetDocumentAnalysis";
+const _GDAR = "GetDocumentAnalysisRequest";
+const _GDARe = "GetDocumentAnalysisResponse";
+const _GDTD = "GetDocumentTextDetection";
+const _GDTDR = "GetDocumentTextDetectionRequest";
+const _GDTDRe = "GetDocumentTextDetectionResponse";
+const _GEA = "GetExpenseAnalysis";
+const _GEAR = "GetExpenseAnalysisRequest";
+const _GEARe = "GetExpenseAnalysisResponse";
+const _GLA = "GetLendingAnalysis";
+const _GLAR = "GetLendingAnalysisRequest";
+const _GLARe = "GetLendingAnalysisResponse";
+const _GLAS = "GetLendingAnalysisSummary";
+const _GLASR = "GetLendingAnalysisSummaryRequest";
+const _GLASRe = "GetLendingAnalysisSummaryResponse";
+const _GP = "GroupProperties";
+const _H = "Height";
+const _HLA = "HumanLoopArn";
+const _HLACER = "HumanLoopActivationConditionsEvaluationResults";
+const _HLAO = "HumanLoopActivationOutput";
+const _HLAR = "HumanLoopActivationReasons";
+const _HLC = "HumanLoopConfig";
+const _HLDA = "HumanLoopDataAttributes";
+const _HLN = "HumanLoopName";
+const _HLQEE = "HumanLoopQuotaExceededException";
+const _I = "Id";
+const _ID = "IdentityDocuments";
+const _IDF = "IdentityDocumentFields";
+const _IDFL = "IdentityDocumentFieldList";
+const _IDFd = "IdentityDocumentField";
+const _IDL = "IdentityDocumentList";
+const _IDd = "IdentityDocument";
+const _IJIE = "InvalidJobIdException";
+const _IKMSKE = "InvalidKMSKeyException";
+const _IPE = "InvalidParameterException";
+const _IPME = "IdempotentParameterMismatchException";
+const _ISE = "InternalServerError";
+const _ISOE = "InvalidS3ObjectException";
+const _Id = "Ids";
+const _In = "Index";
+const _JI = "JobId";
+const _JS = "JobStatus";
+const _JT = "JobTag";
+const _KD = "KeyDetection";
+const _KMSKI = "KMSKeyId";
+const _L = "Left";
+const _LA = "ListAdapters";
+const _LAR = "ListAdaptersRequest";
+const _LARi = "ListAdaptersResponse";
+const _LAV = "ListAdapterVersions";
+const _LAVR = "ListAdapterVersionsRequest";
+const _LAVRi = "ListAdapterVersionsResponse";
+const _LD = "LabelDetection";
+const _LDL = "LendingDetectionList";
+const _LDe = "LendingDocument";
+const _LDen = "LendingDetection";
+const _LEE = "LimitExceededException";
+const _LF = "LendingFields";
+const _LFL = "LendingFieldList";
+const _LFe = "LendingField";
+const _LI = "LineItems";
+const _LIEF = "LineItemExpenseFields";
+const _LIF = "LineItemFields";
+const _LIG = "LineItemGroups";
+const _LIGI = "LineItemGroupIndex";
+const _LIGL = "LineItemGroupList";
+const _LIGi = "LineItemGroup";
+const _LIL = "LineItemList";
+const _LR = "LendingResult";
+const _LRL = "LendingResultList";
+const _LS = "LendingSummary";
+const _LTFR = "ListTagsForResource";
+const _LTFRR = "ListTagsForResourceRequest";
+const _LTFRRi = "ListTagsForResourceResponse";
+const _M = "Message";
+const _MR = "MaxResults";
+const _MSO = "ManifestS3Object";
+const _N = "Name";
+const _NC = "NotificationChannel";
+const _NT = "NextToken";
+const _NV = "NormalizedValue";
+const _OC = "OutputConfig";
+const _P = "Pages";
+const _PC = "PageClassification";
+const _PL = "PredictionList";
+const _PN = "PageNumber";
+const _PT = "PageType";
+const _PTEE = "ProvisionedThroughputExceededException";
+const _Pa = "Page";
+const _Po = "Polygon";
+const _Poi = "Point";
+const _Pr = "Precision";
+const _Pre = "Prediction";
+const _Q = "Query";
+const _QC = "QuotaCode";
+const _QCu = "QueriesConfig";
+const _Qu = "Queries";
+const _R = "Relationships";
+const _RA = "RotationAngle";
+const _RARN = "ResourceARN";
+const _RAo = "RoleArn";
+const _RI = "RowIndex";
+const _RL = "RelationshipList";
+const _RNFE = "ResourceNotFoundException";
+const _RS = "RowSpan";
+const _RT = "ResourceType";
+const _Re = "Recall";
+const _Rel = "Relationship";
+const _Res = "Results";
+const _S = "Status";
+const _SB = "S3Bucket";
+const _SC = "ServiceCode";
+const _SD = "SplitDocuments";
+const _SDA = "StartDocumentAnalysis";
+const _SDAR = "StartDocumentAnalysisRequest";
+const _SDARt = "StartDocumentAnalysisResponse";
+const _SDL = "SignatureDetectionList";
+const _SDLp = "SplitDocumentList";
+const _SDTD = "StartDocumentTextDetection";
+const _SDTDR = "StartDocumentTextDetectionRequest";
+const _SDTDRt = "StartDocumentTextDetectionResponse";
+const _SDi = "SignatureDetections";
+const _SDig = "SignatureDetection";
+const _SDp = "SplitDocument";
+const _SEA = "StartExpenseAnalysis";
+const _SEAR = "StartExpenseAnalysisRequest";
+const _SEARt = "StartExpenseAnalysisResponse";
+const _SF = "SummaryFields";
+const _SJHLACER = "SynthesizedJsonHumanLoopActivationConditionsEvaluationResults";
+const _SLA = "StartLendingAnalysis";
+const _SLAR = "StartLendingAnalysisRequest";
+const _SLARt = "StartLendingAnalysisResponse";
+const _SM = "StatusMessage";
+const _SNSTA = "SNSTopicArn";
+const _SO = "S3Object";
+const _SP = "S3Prefix";
+const _SQEE = "ServiceQuotaExceededException";
+const _SS = "SelectionStatus";
+const _Su = "Summary";
+const _T = "Text";
+const _TE = "ThrottlingException";
+const _TK = "TagKeys";
+const _TR = "TagResource";
+const _TRR = "TagResourceRequest";
+const _TRRa = "TagResourceResponse";
+const _TT = "TextType";
+const _Ta = "Tags";
+const _To = "Top";
+const _Ty = "Type";
+const _Typ = "Types";
+const _UA = "UpdateAdapter";
+const _UAR = "UpdateAdapterRequest";
+const _UARp = "UpdateAdapterResponse";
+const _UDE = "UnsupportedDocumentException";
+const _UDT = "UndetectedDocumentTypes";
+const _UR = "UntagResource";
+const _URR = "UntagResourceRequest";
+const _URRn = "UntagResourceResponse";
+const _US = "UndetectedSignatures";
+const _USL = "UndetectedSignatureList";
+const _USn = "UndetectedSignature";
+const _V = "Version";
+const _VD = "ValueDetection";
+const _VDa = "ValueDetections";
+const _VE = "ValidationException";
+const _VT = "ValueType";
+const _Va = "Value";
+const _W = "Width";
+const _Wa = "Warnings";
+const _War = "Warning";
+const _X = "X";
+const _Y = "Y";
+const _a = "application/json";
+const _c = "client";
+const _e = "error";
+const _hE = "httpError";
+const _mT = "mediaType";
+const _s = "smithy.ts.sdk.synthetic.com.amazonaws.textract";
+const _se = "server";
+const n0 = "com.amazonaws.textract";
+import { TypeRegistry } from "@smithy/core/schema";
+import { AccessDeniedException, BadDocumentException, ConflictException, DocumentTooLargeException, HumanLoopQuotaExceededException, IdempotentParameterMismatchException, InternalServerError, InvalidJobIdException, InvalidKMSKeyException, InvalidParameterException, InvalidS3ObjectException, LimitExceededException, ProvisionedThroughputExceededException, ResourceNotFoundException, ServiceQuotaExceededException, ThrottlingException, UnsupportedDocumentException, ValidationException, } from "../models/errors";
+import { TextractServiceException } from "../models/TextractServiceException";
+const _s_registry = TypeRegistry.for(_s);
+export var TextractServiceException$ = [-3, _s, "TextractServiceException", 0, [], []];
+_s_registry.registerError(TextractServiceException$, TextractServiceException);
+const n0_registry = TypeRegistry.for(n0);
+export var AccessDeniedException$ = [-3, n0, _ADE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(AccessDeniedException$, AccessDeniedException);
+export var BadDocumentException$ = [-3, n0, _BDE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(BadDocumentException$, BadDocumentException);
+export var ConflictException$ = [-3, n0, _CE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ConflictException$, ConflictException);
+export var DocumentTooLargeException$ = [-3, n0, _DTLE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(DocumentTooLargeException$, DocumentTooLargeException);
+export var HumanLoopQuotaExceededException$ = [-3, n0, _HLQEE,
+    { [_e]: _c, [_hE]: 402 },
+    [_RT, _QC, _SC, _M, _C],
+    [0, 0, 0, 0, 0]
+];
+n0_registry.registerError(HumanLoopQuotaExceededException$, HumanLoopQuotaExceededException);
+export var IdempotentParameterMismatchException$ = [-3, n0, _IPME,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(IdempotentParameterMismatchException$, IdempotentParameterMismatchException);
+export var InternalServerError$ = [-3, n0, _ISE,
+    { [_e]: _se },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(InternalServerError$, InternalServerError);
+export var InvalidJobIdException$ = [-3, n0, _IJIE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(InvalidJobIdException$, InvalidJobIdException);
+export var InvalidKMSKeyException$ = [-3, n0, _IKMSKE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(InvalidKMSKeyException$, InvalidKMSKeyException);
+export var InvalidParameterException$ = [-3, n0, _IPE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(InvalidParameterException$, InvalidParameterException);
+export var InvalidS3ObjectException$ = [-3, n0, _ISOE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(InvalidS3ObjectException$, InvalidS3ObjectException);
+export var LimitExceededException$ = [-3, n0, _LEE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(LimitExceededException$, LimitExceededException);
+export var ProvisionedThroughputExceededException$ = [-3, n0, _PTEE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ProvisionedThroughputExceededException$, ProvisionedThroughputExceededException);
+export var ResourceNotFoundException$ = [-3, n0, _RNFE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ResourceNotFoundException$, ResourceNotFoundException);
+export var ServiceQuotaExceededException$ = [-3, n0, _SQEE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ServiceQuotaExceededException$, ServiceQuotaExceededException);
+export var ThrottlingException$ = [-3, n0, _TE,
+    { [_e]: _se },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ThrottlingException$, ThrottlingException);
+export var UnsupportedDocumentException$ = [-3, n0, _UDE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(UnsupportedDocumentException$, UnsupportedDocumentException);
+export var ValidationException$ = [-3, n0, _VE,
+    { [_e]: _c },
+    [_M, _C],
+    [0, 0]
+];
+n0_registry.registerError(ValidationException$, ValidationException);
+export const errorTypeRegistries = [
+    _s_registry,
+    n0_registry,
+];
+var SynthesizedJsonHumanLoopActivationConditionsEvaluationResults = [0, n0, _SJHLACER, { [_mT]: _a }, 0];
+export var Adapter$ = [3, n0, _A,
+    0,
+    [_AI, _V, _P],
+    [0, 0, 64 | 0], 2
+];
+export var AdapterOverview$ = [3, n0, _AO,
+    0,
+    [_AI, _AN, _CT, _FT],
+    [0, 0, 4, 64 | 0]
+];
+export var AdaptersConfig$ = [3, n0, _AC,
+    0,
+    [_Ad],
+    [() => Adapters], 1
+];
+export var AdapterVersionDatasetConfig$ = [3, n0, _AVDC,
+    0,
+    [_MSO],
+    [() => S3Object$]
+];
+export var AdapterVersionEvaluationMetric$ = [3, n0, _AVEM,
+    0,
+    [_B, _AV, _FTe],
+    [() => EvaluationMetric$, () => EvaluationMetric$, 0]
+];
+export var AdapterVersionOverview$ = [3, n0, _AVO,
+    0,
+    [_AI, _AV, _CT, _FT, _S, _SM],
+    [0, 0, 4, 64 | 0, 0, 0]
+];
+export var AnalyzeDocumentRequest$ = [3, n0, _ADR,
+    0,
+    [_D, _FT, _HLC, _QCu, _AC],
+    [() => Document$, 64 | 0, () => HumanLoopConfig$, () => QueriesConfig$, () => AdaptersConfig$], 2
+];
+export var AnalyzeDocumentResponse$ = [3, n0, _ADRn,
+    0,
+    [_DM, _Bl, _HLAO, _ADMV],
+    [() => DocumentMetadata$, () => BlockList, [() => HumanLoopActivationOutput$, 0], 0]
+];
+export var AnalyzeExpenseRequest$ = [3, n0, _AER,
+    0,
+    [_D],
+    [() => Document$], 1
+];
+export var AnalyzeExpenseResponse$ = [3, n0, _AERn,
+    0,
+    [_DM, _ED],
+    [() => DocumentMetadata$, () => ExpenseDocumentList]
+];
+export var AnalyzeIDDetections$ = [3, n0, _AIDD,
+    0,
+    [_T, _NV, _Co],
+    [0, () => NormalizedValue$, 1], 1
+];
+export var AnalyzeIDRequest$ = [3, n0, _AIDR,
+    0,
+    [_DP],
+    [() => DocumentPages], 1
+];
+export var AnalyzeIDResponse$ = [3, n0, _AIDRn,
+    0,
+    [_ID, _DM, _AIDMV],
+    [() => IdentityDocumentList, () => DocumentMetadata$, 0]
+];
+export var Block$ = [3, n0, _Blo,
+    0,
+    [_BT, _Co, _T, _TT, _RI, _CI, _RS, _CS, _G, _I, _R, _ET, _SS, _Pa, _Q],
+    [0, 1, 0, 0, 1, 1, 1, 1, () => Geometry$, 0, () => RelationshipList, 64 | 0, 0, 1, () => Query$]
+];
+export var BoundingBox$ = [3, n0, _BB,
+    0,
+    [_W, _H, _L, _To],
+    [1, 1, 1, 1]
+];
+export var CreateAdapterRequest$ = [3, n0, _CAR,
+    0,
+    [_AN, _FT, _CRT, _De, _AU, _Ta],
+    [0, 64 | 0, [0, 4], 0, 0, 128 | 0], 2
+];
+export var CreateAdapterResponse$ = [3, n0, _CARr,
+    0,
+    [_AI],
+    [0]
+];
+export var CreateAdapterVersionRequest$ = [3, n0, _CAVR,
+    0,
+    [_AI, _DC, _OC, _CRT, _KMSKI, _Ta],
+    [0, () => AdapterVersionDatasetConfig$, () => OutputConfig$, [0, 4], 0, 128 | 0], 3
+];
+export var CreateAdapterVersionResponse$ = [3, n0, _CAVRr,
+    0,
+    [_AI, _AV],
+    [0, 0]
+];
+export var DeleteAdapterRequest$ = [3, n0, _DAR,
+    0,
+    [_AI],
+    [0], 1
+];
+export var DeleteAdapterResponse$ = [3, n0, _DARe,
+    0,
+    [],
+    []
+];
+export var DeleteAdapterVersionRequest$ = [3, n0, _DAVR,
+    0,
+    [_AI, _AV],
+    [0, 0], 2
+];
+export var DeleteAdapterVersionResponse$ = [3, n0, _DAVRe,
+    0,
+    [],
+    []
+];
+export var DetectDocumentTextRequest$ = [3, n0, _DDTR,
+    0,
+    [_D],
+    [() => Document$], 1
+];
+export var DetectDocumentTextResponse$ = [3, n0, _DDTRe,
+    0,
+    [_DM, _Bl, _DDTMV],
+    [() => DocumentMetadata$, () => BlockList, 0]
+];
+export var DetectedSignature$ = [3, n0, _DS,
+    0,
+    [_Pa],
+    [1]
+];
+export var Document$ = [3, n0, _D,
+    0,
+    [_By, _SO],
+    [21, () => S3Object$]
+];
+export var DocumentGroup$ = [3, n0, _DG,
+    0,
+    [_Ty, _SD, _DSe, _US],
+    [0, () => SplitDocumentList, () => DetectedSignatureList, () => UndetectedSignatureList]
+];
+export var DocumentLocation$ = [3, n0, _DL,
+    0,
+    [_SO],
+    [() => S3Object$]
+];
+export var DocumentMetadata$ = [3, n0, _DM,
+    0,
+    [_P],
+    [1]
+];
+export var EvaluationMetric$ = [3, n0, _EM,
+    0,
+    [_FS, _Pr, _Re],
+    [1, 1, 1]
+];
+export var ExpenseCurrency$ = [3, n0, _EC,
+    0,
+    [_C, _Co],
+    [0, 1]
+];
+export var ExpenseDetection$ = [3, n0, _EDx,
+    0,
+    [_T, _G, _Co],
+    [0, () => Geometry$, 1]
+];
+export var ExpenseDocument$ = [3, n0, _EDxp,
+    0,
+    [_EI, _SF, _LIG, _Bl],
+    [1, () => ExpenseFieldList, () => LineItemGroupList, () => BlockList]
+];
+export var ExpenseField$ = [3, n0, _EF,
+    0,
+    [_Ty, _LD, _VD, _PN, _Cu, _GP],
+    [() => ExpenseType$, () => ExpenseDetection$, () => ExpenseDetection$, 1, () => ExpenseCurrency$, () => ExpenseGroupPropertyList]
+];
+export var ExpenseGroupProperty$ = [3, n0, _EGP,
+    0,
+    [_Typ, _I],
+    [64 | 0, 0]
+];
+export var ExpenseType$ = [3, n0, _ETx,
+    0,
+    [_T, _Co],
+    [0, 1]
+];
+export var Extraction$ = [3, n0, _E,
+    0,
+    [_LDe, _EDxp, _IDd],
+    [() => LendingDocument$, () => ExpenseDocument$, () => IdentityDocument$]
+];
+export var Geometry$ = [3, n0, _G,
+    0,
+    [_BB, _Po, _RA],
+    [() => BoundingBox$, () => Polygon, 1]
+];
+export var GetAdapterRequest$ = [3, n0, _GAR,
+    0,
+    [_AI],
+    [0], 1
+];
+export var GetAdapterResponse$ = [3, n0, _GARe,
+    0,
+    [_AI, _AN, _CT, _De, _FT, _AU, _Ta],
+    [0, 0, 4, 0, 64 | 0, 0, 128 | 0]
+];
+export var GetAdapterVersionRequest$ = [3, n0, _GAVR,
+    0,
+    [_AI, _AV],
+    [0, 0], 2
+];
+export var GetAdapterVersionResponse$ = [3, n0, _GAVRe,
+    0,
+    [_AI, _AV, _CT, _FT, _S, _SM, _DC, _KMSKI, _OC, _EMv, _Ta],
+    [0, 0, 4, 64 | 0, 0, 0, () => AdapterVersionDatasetConfig$, 0, () => OutputConfig$, () => AdapterVersionEvaluationMetrics, 128 | 0]
+];
+export var GetDocumentAnalysisRequest$ = [3, n0, _GDAR,
+    0,
+    [_JI, _MR, _NT],
+    [0, 1, 0], 1
+];
+export var GetDocumentAnalysisResponse$ = [3, n0, _GDARe,
+    0,
+    [_DM, _JS, _NT, _Bl, _Wa, _SM, _ADMV],
+    [() => DocumentMetadata$, 0, 0, () => BlockList, () => Warnings, 0, 0]
+];
+export var GetDocumentTextDetectionRequest$ = [3, n0, _GDTDR,
+    0,
+    [_JI, _MR, _NT],
+    [0, 1, 0], 1
+];
+export var GetDocumentTextDetectionResponse$ = [3, n0, _GDTDRe,
+    0,
+    [_DM, _JS, _NT, _Bl, _Wa, _SM, _DDTMV],
+    [() => DocumentMetadata$, 0, 0, () => BlockList, () => Warnings, 0, 0]
+];
+export var GetExpenseAnalysisRequest$ = [3, n0, _GEAR,
+    0,
+    [_JI, _MR, _NT],
+    [0, 1, 0], 1
+];
+export var GetExpenseAnalysisResponse$ = [3, n0, _GEARe,
+    0,
+    [_DM, _JS, _NT, _ED, _Wa, _SM, _AEMV],
+    [() => DocumentMetadata$, 0, 0, () => ExpenseDocumentList, () => Warnings, 0, 0]
+];
+export var GetLendingAnalysisRequest$ = [3, n0, _GLAR,
+    0,
+    [_JI, _MR, _NT],
+    [0, 1, 0], 1
+];
+export var GetLendingAnalysisResponse$ = [3, n0, _GLARe,
+    0,
+    [_DM, _JS, _NT, _Res, _Wa, _SM, _ALMV],
+    [() => DocumentMetadata$, 0, 0, () => LendingResultList, () => Warnings, 0, 0]
+];
+export var GetLendingAnalysisSummaryRequest$ = [3, n0, _GLASR,
+    0,
+    [_JI],
+    [0], 1
+];
+export var GetLendingAnalysisSummaryResponse$ = [3, n0, _GLASRe,
+    0,
+    [_DM, _JS, _Su, _Wa, _SM, _ALMV],
+    [() => DocumentMetadata$, 0, () => LendingSummary$, () => Warnings, 0, 0]
+];
+export var HumanLoopActivationOutput$ = [3, n0, _HLAO,
+    0,
+    [_HLA, _HLAR, _HLACER],
+    [0, 64 | 0, [() => SynthesizedJsonHumanLoopActivationConditionsEvaluationResults, 0]]
+];
+export var HumanLoopConfig$ = [3, n0, _HLC,
+    0,
+    [_HLN, _FDA, _DA],
+    [0, 0, () => HumanLoopDataAttributes$], 2
+];
+export var HumanLoopDataAttributes$ = [3, n0, _HLDA,
+    0,
+    [_CC],
+    [64 | 0]
+];
+export var IdentityDocument$ = [3, n0, _IDd,
+    0,
+    [_DI, _IDF, _Bl],
+    [1, () => IdentityDocumentFieldList, () => BlockList]
+];
+export var IdentityDocumentField$ = [3, n0, _IDFd,
+    0,
+    [_Ty, _VD],
+    [() => AnalyzeIDDetections$, () => AnalyzeIDDetections$]
+];
+export var LendingDetection$ = [3, n0, _LDen,
+    0,
+    [_T, _SS, _G, _Co],
+    [0, 0, () => Geometry$, 1]
+];
+export var LendingDocument$ = [3, n0, _LDe,
+    0,
+    [_LF, _SDi],
+    [() => LendingFieldList, () => SignatureDetectionList]
+];
+export var LendingField$ = [3, n0, _LFe,
+    0,
+    [_Ty, _KD, _VDa],
+    [0, () => LendingDetection$, () => LendingDetectionList]
+];
+export var LendingResult$ = [3, n0, _LR,
+    0,
+    [_Pa, _PC, _Ex],
+    [1, () => PageClassification$, () => ExtractionList]
+];
+export var LendingSummary$ = [3, n0, _LS,
+    0,
+    [_DGo, _UDT],
+    [() => DocumentGroupList, 64 | 0]
+];
+export var LineItemFields$ = [3, n0, _LIF,
+    0,
+    [_LIEF],
+    [() => ExpenseFieldList]
+];
+export var LineItemGroup$ = [3, n0, _LIGi,
+    0,
+    [_LIGI, _LI],
+    [1, () => LineItemList]
+];
+export var ListAdaptersRequest$ = [3, n0, _LAR,
+    0,
+    [_ACT, _BCT, _MR, _NT],
+    [4, 4, 1, 0]
+];
+export var ListAdaptersResponse$ = [3, n0, _LARi,
+    0,
+    [_Ad, _NT],
+    [() => AdapterList, 0]
+];
+export var ListAdapterVersionsRequest$ = [3, n0, _LAVR,
+    0,
+    [_AI, _ACT, _BCT, _MR, _NT],
+    [0, 4, 4, 1, 0]
+];
+export var ListAdapterVersionsResponse$ = [3, n0, _LAVRi,
+    0,
+    [_AVd, _NT],
+    [() => AdapterVersionList, 0]
+];
+export var ListTagsForResourceRequest$ = [3, n0, _LTFRR,
+    0,
+    [_RARN],
+    [0], 1
+];
+export var ListTagsForResourceResponse$ = [3, n0, _LTFRRi,
+    0,
+    [_Ta],
+    [128 | 0]
+];
+export var NormalizedValue$ = [3, n0, _NV,
+    0,
+    [_Va, _VT],
+    [0, 0]
+];
+export var NotificationChannel$ = [3, n0, _NC,
+    0,
+    [_SNSTA, _RAo],
+    [0, 0], 2
+];
+export var OutputConfig$ = [3, n0, _OC,
+    0,
+    [_SB, _SP],
+    [0, 0], 1
+];
+export var PageClassification$ = [3, n0, _PC,
+    0,
+    [_PT, _PN],
+    [() => PredictionList, () => PredictionList], 2
+];
+export var Point$ = [3, n0, _Poi,
+    0,
+    [_X, _Y],
+    [1, 1]
+];
+export var Prediction$ = [3, n0, _Pre,
+    0,
+    [_Va, _Co],
+    [0, 1]
+];
+export var QueriesConfig$ = [3, n0, _QCu,
+    0,
+    [_Qu],
+    [() => Queries], 1
+];
+export var Query$ = [3, n0, _Q,
+    0,
+    [_T, _Al, _P],
+    [0, 0, 64 | 0], 1
+];
+export var Relationship$ = [3, n0, _Rel,
+    0,
+    [_Ty, _Id],
+    [0, 64 | 0]
+];
+export var S3Object$ = [3, n0, _SO,
+    0,
+    [_Bu, _N, _V],
+    [0, 0, 0]
+];
+export var SignatureDetection$ = [3, n0, _SDig,
+    0,
+    [_Co, _G],
+    [1, () => Geometry$]
+];
+export var SplitDocument$ = [3, n0, _SDp,
+    0,
+    [_In, _P],
+    [1, 64 | 1]
+];
+export var StartDocumentAnalysisRequest$ = [3, n0, _SDAR,
+    0,
+    [_DL, _FT, _CRT, _JT, _NC, _OC, _KMSKI, _QCu, _AC],
+    [() => DocumentLocation$, 64 | 0, 0, 0, () => NotificationChannel$, () => OutputConfig$, 0, () => QueriesConfig$, () => AdaptersConfig$], 2
+];
+export var StartDocumentAnalysisResponse$ = [3, n0, _SDARt,
+    0,
+    [_JI],
+    [0]
+];
+export var StartDocumentTextDetectionRequest$ = [3, n0, _SDTDR,
+    0,
+    [_DL, _CRT, _JT, _NC, _OC, _KMSKI],
+    [() => DocumentLocation$, 0, 0, () => NotificationChannel$, () => OutputConfig$, 0], 1
+];
+export var StartDocumentTextDetectionResponse$ = [3, n0, _SDTDRt,
+    0,
+    [_JI],
+    [0]
+];
+export var StartExpenseAnalysisRequest$ = [3, n0, _SEAR,
+    0,
+    [_DL, _CRT, _JT, _NC, _OC, _KMSKI],
+    [() => DocumentLocation$, 0, 0, () => NotificationChannel$, () => OutputConfig$, 0], 1
+];
+export var StartExpenseAnalysisResponse$ = [3, n0, _SEARt,
+    0,
+    [_JI],
+    [0]
+];
+export var StartLendingAnalysisRequest$ = [3, n0, _SLAR,
+    0,
+    [_DL, _CRT, _JT, _NC, _OC, _KMSKI],
+    [() => DocumentLocation$, 0, 0, () => NotificationChannel$, () => OutputConfig$, 0], 1
+];
+export var StartLendingAnalysisResponse$ = [3, n0, _SLARt,
+    0,
+    [_JI],
+    [0]
+];
+export var TagResourceRequest$ = [3, n0, _TRR,
+    0,
+    [_RARN, _Ta],
+    [0, 128 | 0], 2
+];
+export var TagResourceResponse$ = [3, n0, _TRRa,
+    0,
+    [],
+    []
+];
+export var UndetectedSignature$ = [3, n0, _USn,
+    0,
+    [_Pa],
+    [1]
+];
+export var UntagResourceRequest$ = [3, n0, _URR,
+    0,
+    [_RARN, _TK],
+    [0, 64 | 0], 2
+];
+export var UntagResourceResponse$ = [3, n0, _URRn,
+    0,
+    [],
+    []
+];
+export var UpdateAdapterRequest$ = [3, n0, _UAR,
+    0,
+    [_AI, _De, _AN, _AU],
+    [0, 0, 0, 0], 1
+];
+export var UpdateAdapterResponse$ = [3, n0, _UARp,
+    0,
+    [_AI, _AN, _CT, _De, _FT, _AU],
+    [0, 0, 4, 0, 64 | 0, 0]
+];
+export var Warning$ = [3, n0, _War,
+    0,
+    [_ECr, _P],
+    [0, 64 | 1]
+];
+var AdapterList = [1, n0, _AL,
+    0, () => AdapterOverview$
+];
+var AdapterPages = 64 | 0;
+var Adapters = [1, n0, _Ad,
+    0, () => Adapter$
+];
+var AdapterVersionEvaluationMetrics = [1, n0, _AVEMd,
+    0, () => AdapterVersionEvaluationMetric$
+];
+var AdapterVersionList = [1, n0, _AVL,
+    0, () => AdapterVersionOverview$
+];
+var BlockList = [1, n0, _BL,
+    0, () => Block$
+];
+var ContentClassifiers = 64 | 0;
+var DetectedSignatureList = [1, n0, _DSL,
+    0, () => DetectedSignature$
+];
+var DocumentGroupList = [1, n0, _DGL,
+    0, () => DocumentGroup$
+];
+var DocumentPages = [1, n0, _DP,
+    0, () => Document$
+];
+var EntityTypes = 64 | 0;
+var ExpenseDocumentList = [1, n0, _EDL,
+    0, () => ExpenseDocument$
+];
+var ExpenseFieldList = [1, n0, _EFL,
+    0, () => ExpenseField$
+];
+var ExpenseGroupPropertyList = [1, n0, _EGPL,
+    0, () => ExpenseGroupProperty$
+];
+var ExtractionList = [1, n0, _EL,
+    0, () => Extraction$
+];
+var FeatureTypes = 64 | 0;
+var HumanLoopActivationReasons = 64 | 0;
+var IdentityDocumentFieldList = [1, n0, _IDFL,
+    0, () => IdentityDocumentField$
+];
+var IdentityDocumentList = [1, n0, _IDL,
+    0, () => IdentityDocument$
+];
+var IdList = 64 | 0;
+var LendingDetectionList = [1, n0, _LDL,
+    0, () => LendingDetection$
+];
+var LendingFieldList = [1, n0, _LFL,
+    0, () => LendingField$
+];
+var LendingResultList = [1, n0, _LRL,
+    0, () => LendingResult$
+];
+var LineItemGroupList = [1, n0, _LIGL,
+    0, () => LineItemGroup$
+];
+var LineItemList = [1, n0, _LIL,
+    0, () => LineItemFields$
+];
+var PageList = 64 | 1;
+var Pages = 64 | 1;
+var Polygon = [1, n0, _Po,
+    0, () => Point$
+];
+var PredictionList = [1, n0, _PL,
+    0, () => Prediction$
+];
+var Queries = [1, n0, _Qu,
+    0, () => Query$
+];
+var QueryPages = 64 | 0;
+var RelationshipList = [1, n0, _RL,
+    0, () => Relationship$
+];
+var SignatureDetectionList = [1, n0, _SDL,
+    0, () => SignatureDetection$
+];
+var SplitDocumentList = [1, n0, _SDLp,
+    0, () => SplitDocument$
+];
+var StringList = 64 | 0;
+var TagKeyList = 64 | 0;
+var UndetectedDocumentTypeList = 64 | 0;
+var UndetectedSignatureList = [1, n0, _USL,
+    0, () => UndetectedSignature$
+];
+var Warnings = [1, n0, _Wa,
+    0, () => Warning$
+];
+var TagMap = 128 | 0;
+export var AnalyzeDocument$ = [9, n0, _AD,
+    0, () => AnalyzeDocumentRequest$, () => AnalyzeDocumentResponse$
+];
+export var AnalyzeExpense$ = [9, n0, _AE,
+    0, () => AnalyzeExpenseRequest$, () => AnalyzeExpenseResponse$
+];
+export var AnalyzeID$ = [9, n0, _AID,
+    0, () => AnalyzeIDRequest$, () => AnalyzeIDResponse$
+];
+export var CreateAdapter$ = [9, n0, _CA,
+    2, () => CreateAdapterRequest$, () => CreateAdapterResponse$
+];
+export var CreateAdapterVersion$ = [9, n0, _CAV,
+    2, () => CreateAdapterVersionRequest$, () => CreateAdapterVersionResponse$
+];
+export var DeleteAdapter$ = [9, n0, _DAe,
+    2, () => DeleteAdapterRequest$, () => DeleteAdapterResponse$
+];
+export var DeleteAdapterVersion$ = [9, n0, _DAV,
+    2, () => DeleteAdapterVersionRequest$, () => DeleteAdapterVersionResponse$
+];
+export var DetectDocumentText$ = [9, n0, _DDT,
+    0, () => DetectDocumentTextRequest$, () => DetectDocumentTextResponse$
+];
+export var GetAdapter$ = [9, n0, _GA,
+    0, () => GetAdapterRequest$, () => GetAdapterResponse$
+];
+export var GetAdapterVersion$ = [9, n0, _GAV,
+    0, () => GetAdapterVersionRequest$, () => GetAdapterVersionResponse$
+];
+export var GetDocumentAnalysis$ = [9, n0, _GDA,
+    0, () => GetDocumentAnalysisRequest$, () => GetDocumentAnalysisResponse$
+];
+export var GetDocumentTextDetection$ = [9, n0, _GDTD,
+    0, () => GetDocumentTextDetectionRequest$, () => GetDocumentTextDetectionResponse$
+];
+export var GetExpenseAnalysis$ = [9, n0, _GEA,
+    0, () => GetExpenseAnalysisRequest$, () => GetExpenseAnalysisResponse$
+];
+export var GetLendingAnalysis$ = [9, n0, _GLA,
+    0, () => GetLendingAnalysisRequest$, () => GetLendingAnalysisResponse$
+];
+export var GetLendingAnalysisSummary$ = [9, n0, _GLAS,
+    0, () => GetLendingAnalysisSummaryRequest$, () => GetLendingAnalysisSummaryResponse$
+];
+export var ListAdapters$ = [9, n0, _LA,
+    0, () => ListAdaptersRequest$, () => ListAdaptersResponse$
+];
+export var ListAdapterVersions$ = [9, n0, _LAV,
+    0, () => ListAdapterVersionsRequest$, () => ListAdapterVersionsResponse$
+];
+export var ListTagsForResource$ = [9, n0, _LTFR,
+    0, () => ListTagsForResourceRequest$, () => ListTagsForResourceResponse$
+];
+export var StartDocumentAnalysis$ = [9, n0, _SDA,
+    0, () => StartDocumentAnalysisRequest$, () => StartDocumentAnalysisResponse$
+];
+export var StartDocumentTextDetection$ = [9, n0, _SDTD,
+    0, () => StartDocumentTextDetectionRequest$, () => StartDocumentTextDetectionResponse$
+];
+export var StartExpenseAnalysis$ = [9, n0, _SEA,
+    0, () => StartExpenseAnalysisRequest$, () => StartExpenseAnalysisResponse$
+];
+export var StartLendingAnalysis$ = [9, n0, _SLA,
+    0, () => StartLendingAnalysisRequest$, () => StartLendingAnalysisResponse$
+];
+export var TagResource$ = [9, n0, _TR,
+    0, () => TagResourceRequest$, () => TagResourceResponse$
+];
+export var UntagResource$ = [9, n0, _UR,
+    0, () => UntagResourceRequest$, () => UntagResourceResponse$
+];
+export var UpdateAdapter$ = [9, n0, _UA,
+    0, () => UpdateAdapterRequest$, () => UpdateAdapterResponse$
+];

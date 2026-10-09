@@ -1,0 +1,117 @@
+import { JsonCodec, JsonShapeDeserializer, JsonShapeSerializer } from "@aws-sdk/core/protocols";
+import { NormalizedSchema } from "@smithy/core/schema";
+import { fromBase64, toBase64 } from "@smithy/core/serde";
+export class DynamoDBJsonCodec extends JsonCodec {
+    constructor() {
+        super({
+            timestampFormat: {
+                useTrait: true,
+                default: 7,
+            },
+            jsonName: false,
+        });
+    }
+    createSerializer() {
+        const serializer = new DynamoDBJsonShapeSerializer(this.settings);
+        serializer.setSerdeContext(this.serdeContext);
+        return serializer;
+    }
+    createDeserializer() {
+        const deserializer = new DynamoDBJsonShapeDeserializer(this.settings);
+        deserializer.setSerdeContext(this.serdeContext);
+        return deserializer;
+    }
+}
+const ATTRIBUTE_VALUE = "com.amazonaws.dynamodb#AttributeValue";
+class DynamoDBJsonShapeSerializer extends JsonShapeSerializer {
+    _write(schema, value, container) {
+        const ns = NormalizedSchema.of(schema);
+        if (ns.isStructSchema() && ns.getName(true) === ATTRIBUTE_VALUE) {
+            if (value && typeof value === "object") {
+                const av = value;
+                const out = this.copyRemoveNulls(av);
+                const base64Encode = this.serdeContext?.base64Encoder ?? toBase64;
+                if (av.B instanceof Uint8Array) {
+                    out.B = base64Encode(av.B);
+                }
+                if (Array.isArray(av.BS)) {
+                    out.BS = av.BS.map(base64Encode);
+                }
+                if (Array.isArray(av.L)) {
+                    const list = [];
+                    for (const v of av.L) {
+                        if (v != null) {
+                            list.push(this._write(ns, v, container));
+                        }
+                    }
+                    out.L = list;
+                }
+                if (av.M && typeof av.M === "object") {
+                    out.M = {};
+                    for (const [k, v] of Object.entries(av.M)) {
+                        if (v != null) {
+                            out.M[k] = this._write(ns, v, container);
+                        }
+                    }
+                }
+                return out;
+            }
+        }
+        return super._write(ns, value, container);
+    }
+    copyRemoveNulls(v) {
+        if (typeof v !== "object") {
+            return v;
+        }
+        if (v === null) {
+            return {};
+        }
+        if (Array.isArray(v)) {
+            const out = [];
+            for (const item of v) {
+                if (item != null) {
+                    out.push(this.copyRemoveNulls(item));
+                }
+            }
+            return out;
+        }
+        const out = {};
+        for (const [k, _v] of Object.entries(v)) {
+            if (_v != null) {
+                if (["B", "BS", "L", "M"].includes(k)) {
+                    continue;
+                }
+                out[k] = this.copyRemoveNulls(_v);
+            }
+        }
+        return out;
+    }
+}
+class DynamoDBJsonShapeDeserializer extends JsonShapeDeserializer {
+    _read(schema, value) {
+        const ns = NormalizedSchema.of(schema);
+        if (ns.isStructSchema() && ns.getName(true) === ATTRIBUTE_VALUE) {
+            if (value && typeof value === "object") {
+                const av = value;
+                const out = av;
+                const base64Decoder = this.serdeContext?.base64Decoder ?? fromBase64;
+                if (typeof av.B === "string") {
+                    out.B = base64Decoder(av.B);
+                }
+                if (Array.isArray(av.BS)) {
+                    out.BS = av.BS.map(base64Decoder);
+                }
+                if (Array.isArray(av.L)) {
+                    out.L = av.L.map((v) => this._read(ns, v));
+                }
+                if (av.M && typeof av.M === "object") {
+                    for (const [k, v] of Object.entries(av.M)) {
+                        out.M[k] = this._read(ns, v);
+                    }
+                }
+                return out;
+            }
+        }
+        return super._read(ns, value);
+    }
+}

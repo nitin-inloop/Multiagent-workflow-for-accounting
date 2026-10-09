@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+out/
+
+# Local runtime data: uploaded invoices and the JSON document store.
+# Customer documents must never reach the repository.
+backend/.data/
+
+# Environment files. Only the .example files are tracked.
+.env
+.env.*
+!.env.example
+!.env.local.example
+!.env.production.example
+
+# Local screenshot and driver scratch space
+.dev/
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.log
+.vercel

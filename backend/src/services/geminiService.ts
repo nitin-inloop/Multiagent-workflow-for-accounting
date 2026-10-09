@@ -469,6 +469,27 @@ async function errorDetail(response: Response): Promise<string> {
   return body.slice(0, 300) || response.statusText;
 }
 
+/**
+ * Which optional generationConfig field a 400 is complaining about, if any.
+ * Anything else in a 400 is a real problem with the request and is not retried.
+ */
+function rejectedOptionalField(detail: string): string | null {
+  if (/think/i.test(detail)) return 'thinkingConfig';
+  if (/response_?schema/i.test(detail)) return 'responseSchema';
+  return null;
+}
+
+/** Rate limits and gateway faults clear on their own; 4xx will not. */
+function isTransientStatus(status: number): boolean {
+  return status === 408 || status === 429 || status >= 500;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms).unref();
+  });
+}
+
 /** Coerces the model's transcription into typed fields; parse failures -> null. */
 function coerceVisionFields(
   suggested: z.infer<typeof visionResponseSchema>['fields'],

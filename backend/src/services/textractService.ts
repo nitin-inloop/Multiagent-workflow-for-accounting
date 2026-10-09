@@ -31,11 +31,25 @@ const GSTIN_IN_TEXT = /\b[0-3][0-9][A-Z]{5}[0-9]{4}[A-Z][0-9A-Z]Z[0-9A-Z]\b/;
  * sure about is left null so validation can raise it as an exception.
  */
 export class TextractService {
-  private readonly client = new TextractClient({ region: config.aws.region });
+  private readonly client = new TextractClient({
+    region: config.aws.region,
+    // A dead credential should reach the fallback in a second, not in ten.
+    maxAttempts: config.aws.maxAttempts,
+  });
+
+  /**
+   * Resolves the credential chain once at boot. The first AWS call otherwise
+   * pays for credential lookup and a TLS handshake on top of the OCR itself,
+   * which is exactly the upload a person is watching.
+   */
+  async warm(): Promise<void> {
+    await this.client.config.credentials();
+  }
 
   async analyzeExpense(bytes: Buffer): Promise<TextractExtraction> {
     const response = await this.client.send(
       new AnalyzeExpenseCommand({ Document: { Bytes: bytes } }),
+      { abortSignal: AbortSignal.timeout(config.aws.textractTimeoutMs) },
     );
 
     const documents = response.ExpenseDocuments ?? [];

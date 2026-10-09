@@ -23,14 +23,79 @@ import { parseAmount } from '../utils/money.js';
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
 
-/** A vision pass over a large scan is slow; a stuck one must not hold an upload open. */
-const REQUEST_TIMEOUT_MS = 60_000;
-
 /**
  * Inline uploads share a 20 MB request budget and base64 adds a third on top,
  * so refuse a file that cannot fit instead of sending a doomed request.
  */
 const MAX_INLINE_BASE64_BYTES = 18 * 1024 * 1024;
+
+/**
+ * Response schemas, in the OpenAPI subset the API accepts. Constraining the
+ * decoder is worth a round-trip on its own: an unparseable reply used to cost
+ * the document its real extraction and drop it to the sample fallback, and the
+ * prompt asking nicely for JSON was the only thing preventing that.
+ */
+const NULLABLE_STRING = { type: 'STRING', nullable: true } as const;
+const NULLABLE_NUMBER = { type: 'NUMBER', nullable: true } as const;
+
+const LINE_ITEM_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    name: { type: 'STRING' },
+    quantity: NULLABLE_NUMBER,
+    rate: NULLABLE_NUMBER,
+    amount: NULLABLE_NUMBER,
+    hsn: NULLABLE_STRING,
+  },
+  required: ['name'],
+} as const;
+
+const TAX_SCHEMA = {
+  type: 'OBJECT',
+  properties: { cgst: NULLABLE_NUMBER, sgst: NULLABLE_NUMBER, igst: NULLABLE_NUMBER },
+} as const;
+
+const INVOICE_FIELDS_SCHEMA_PROPERTIES = {
+  vendorName: NULLABLE_STRING,
+  gstin: NULLABLE_STRING,
+  invoiceNumber: NULLABLE_STRING,
+  invoiceDate: NULLABLE_STRING,
+  placeOfSupply: NULLABLE_STRING,
+  lineItems: { type: 'ARRAY', items: LINE_ITEM_SCHEMA },
+  subTotal: NULLABLE_NUMBER,
+  tax: TAX_SCHEMA,
+  total: NULLABLE_NUMBER,
+} as const;
+
+const STRING_LIST = { type: 'ARRAY', items: { type: 'STRING' } } as const;
+
+const NORMALIZE_RESPONSE_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    fields: { type: 'OBJECT', properties: INVOICE_FIELDS_SCHEMA_PROPERTIES },
+    missingFields: STRING_LIST,
+    suspiciousFields: STRING_LIST,
+    explanation: { type: 'STRING' },
+  },
+  required: ['fields', 'explanation'],
+} as const;
+
+const VISION_RESPONSE_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    fields: {
+      type: 'OBJECT',
+      properties: {
+        ...INVOICE_FIELDS_SCHEMA_PROPERTIES,
+        hasSignature: { type: 'BOOLEAN', nullable: true },
+      },
+    },
+    confidence: { type: 'NUMBER' },
+    missingFields: STRING_LIST,
+    explanation: { type: 'STRING' },
+  },
+  required: ['fields', 'confidence', 'explanation'],
+} as const;
 
 const SYSTEM_PROMPT = `You are an invoice validation assistant for an Indian accounting workflow.
 Use ONLY the extracted fields supplied in the user message. Never invent a value.
@@ -130,6 +195,26 @@ interface GeminiResponse {
   promptFeedback?: { blockReason?: string };
 }
 
+/** One generateContent call, described by the caller rather than by a signature. */
+interface GeminiRequest {
+  system: string;
+  parts: GeminiPart[];
+  maxOutputTokens: number;
+  timeoutMs: number;
+  responseSchema: unknown;
+}
+
+/** A fault worth trying again: a timeout, a 429, or a 5xx. */
+class TransientGeminiError extends Error {}
+
+/**
+ * generationConfig fields that older model generations reject outright. A 400
+ * naming one is a fact about the model, not about the document, so it is
+ * remembered process-wide: the first extraction pays the discovery round-trip
+ * and every later one goes straight out with a body the model accepts.
+ */
+const unsupportedFields = new Set<string>();
+
 export class GeminiService {
   private readonly apiKey: string;
   private readonly model: string;
@@ -143,60 +228,97 @@ export class GeminiService {
   }
 
   /** One HTTP round-trip. Timeouts and transport faults come back as Errors. */
-  private async post(body: string): Promise<Response> {
+  private async post(body: string, timeoutMs: number): Promise<Response> {
     try {
       return await fetch(`${API_BASE}/${encodeURIComponent(this.model)}:generateContent`, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-goog-api-key': this.apiKey },
         body,
-        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+        signal: AbortSignal.timeout(timeoutMs),
       });
     } catch (error) {
       const cause = error as Error;
-      throw new Error(
+      throw new TransientGeminiError(
         cause.name === 'TimeoutError'
-          ? `Gemini did not respond within ${REQUEST_TIMEOUT_MS / 1000}s`
+          ? `Gemini did not respond within ${Math.round(timeoutMs / 1000)}s`
           : `Gemini request failed: ${cause.message}`,
       );
     }
   }
 
-  /** One generateContent round-trip that must come back as JSON. */
-  private async generateJson(
-    system: string,
-    parts: GeminiPart[],
-    maxOutputTokens: number,
-  ): Promise<unknown> {
-    const body = (thinkingLevel?: string): string =>
-      JSON.stringify({
-        systemInstruction: { parts: [{ text: system }] },
-        contents: [{ role: 'user', parts }],
+  /**
+   * One generateContent round-trip that must come back as JSON, retried for
+   * transient faults. A 429 during a bulk drop used to cost that document its
+   * real extraction; one jittered retry usually saves it.
+   */
+  private async generateJson(request: GeminiRequest): Promise<unknown> {
+    let lastError: Error = new Error('Gemini call was never attempted');
+
+    for (let attempt = 1; attempt <= config.gemini.maxAttempts; attempt += 1) {
+      try {
+        return await this.attempt(request);
+      } catch (error) {
+        lastError = error as Error;
+        if (!(error instanceof TransientGeminiError) || attempt === config.gemini.maxAttempts) {
+          throw error;
+        }
+        const delay = Math.round(500 * 2 ** (attempt - 1) * (0.5 + Math.random() * 0.5));
+        logger.debug('Retrying Gemini call after a transient fault', {
+          attempt,
+          delay,
+          error: lastError.message,
+        });
+        await sleep(delay);
+      }
+    }
+
+    throw lastError;
+  }
+
+  /** A single attempt, including the one-off climbdown from rejected fields. */
+  private async attempt(request: GeminiRequest): Promise<unknown> {
+    const body = (): string => {
+      const level =
+        config.gemini.thinkingLevel === 'off' || unsupportedFields.has('thinkingConfig')
+          ? undefined
+          : config.gemini.thinkingLevel;
+      return JSON.stringify({
+        systemInstruction: { parts: [{ text: request.system }] },
+        contents: [{ role: 'user', parts: request.parts }],
         generationConfig: {
           temperature: 0,
           topP: 0.1,
-          maxOutputTokens,
+          maxOutputTokens: request.maxOutputTokens,
           responseMimeType: 'application/json',
-          ...(thinkingLevel ? { thinkingConfig: { thinkingLevel } } : {}),
+          ...(unsupportedFields.has('responseSchema')
+            ? {}
+            : { responseSchema: request.responseSchema }),
+          ...(level ? { thinkingConfig: { thinkingLevel: level } } : {}),
         },
       });
+    };
 
-    const level = config.gemini.thinkingLevel === 'off' ? undefined : config.gemini.thinkingLevel;
-    let response = await this.post(body(level));
-
-    // Reasoning depth is not spelled the same way across model generations. A
-    // 400 that names the field means this model will not take it, which is no
-    // reason to give up on the document - ask again and let the model decide.
-    if (!response.ok && response.status === 400 && level) {
+    // Reasoning depth and structured output are not spelled the same way across
+    // model generations. A 400 that names one of those fields means this model
+    // will not take it, which is no reason to give up on the document - note it,
+    // drop it, ask again. At most one climbdown per optional field.
+    let response = await this.post(body(), request.timeoutMs);
+    for (let drops = 0; drops < 2 && !response.ok && response.status === 400; drops += 1) {
       const detail = await errorDetail(response);
-      if (!/think/i.test(detail)) {
+      const rejected = rejectedOptionalField(detail);
+      if (!rejected || unsupportedFields.has(rejected)) {
         throw new Error(`Gemini returned HTTP 400: ${detail}`);
       }
-      logger.debug('Gemini rejected thinkingLevel; retrying with the model default', { detail });
-      response = await this.post(body());
+      unsupportedFields.add(rejected);
+      logger.debug(`Gemini rejected ${rejected}; retrying without it`, { detail });
+      response = await this.post(body(), request.timeoutMs);
     }
 
     if (!response.ok) {
-      throw new Error(`Gemini returned HTTP ${response.status}: ${await errorDetail(response)}`);
+      const message = `Gemini returned HTTP ${response.status}: ${await errorDetail(response)}`;
+      throw isTransientStatus(response.status)
+        ? new TransientGeminiError(message)
+        : new Error(message);
     }
 
     const result = (await response.json()) as GeminiResponse;
@@ -207,11 +329,15 @@ export class GeminiService {
       .trim();
 
     if (text.length === 0) {
-      // MAX_TOKENS here means the budget ran out; SAFETY means the document was
-      // blocked. Either way the caller falls back rather than guessing.
+      // MAX_TOKENS means the budget ran out and a retry would spend it the same
+      // way; SAFETY means the document was blocked. Anything else may be a
+      // flake, and one more try is cheaper than the sample fallback.
       const reason =
         candidate?.finishReason ?? result.promptFeedback?.blockReason ?? 'no candidate';
-      throw new Error(`Gemini returned an empty response (${reason})`);
+      const message = `Gemini returned an empty response (${reason})`;
+      throw /MAX_TOKENS|SAFETY|BLOCK|RECITATION|PROHIBITED/i.test(reason)
+        ? new Error(message)
+        : new TransientGeminiError(message);
     }
 
     return extractJson(text);
@@ -226,7 +352,13 @@ export class GeminiService {
       fieldConfidence: input.fieldConfidence,
     };
 
-    const raw = await this.generateJson(SYSTEM_PROMPT, [{ text: JSON.stringify(payload) }], 4096);
+    const raw = await this.generateJson({
+      system: SYSTEM_PROMPT,
+      parts: [{ text: JSON.stringify(payload) }],
+      maxOutputTokens: 4096,
+      timeoutMs: config.gemini.normalizeTimeoutMs,
+      responseSchema: NORMALIZE_RESPONSE_SCHEMA,
+    });
 
     const parsed = geminiResponseSchema.safeParse(raw);
     if (!parsed.success) {
@@ -260,14 +392,16 @@ export class GeminiService {
     bytes: Buffer;
     mimeType: string;
   }): Promise<VisionExtractionResult> {
-    const raw = await this.generateJson(
-      VISION_SYSTEM_PROMPT,
-      [
+    const raw = await this.generateJson({
+      system: VISION_SYSTEM_PROMPT,
+      parts: [
         inlineDataPart(input.bytes, input.mimeType),
         { text: 'Extract the invoice fields as specified.' },
       ],
-      8192,
-    );
+      maxOutputTokens: 8192,
+      timeoutMs: config.gemini.visionTimeoutMs,
+      responseSchema: VISION_RESPONSE_SCHEMA,
+    });
 
     const parsed = visionResponseSchema.safeParse(raw);
     if (!parsed.success) {

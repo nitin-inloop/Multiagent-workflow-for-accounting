@@ -168,6 +168,8 @@ export const config = {
     textract: resolveToggle(raw.ENABLE_TEXTRACT, credentialsPresent),
     // Never on without a key - every request would come back 401.
     gemini: Boolean(raw.GEMINI_API_KEY) && resolveToggle(raw.ENABLE_GEMINI, true),
+    // Only meaningful when both readers are live; on by default when they are.
+    parallelExtraction: resolveToggle(raw.ENABLE_PARALLEL_EXTRACTION, true),
     email: Boolean(raw.SMTP_HOST && raw.SMTP_USER && raw.SMTP_PASS),
   },
 } as const;

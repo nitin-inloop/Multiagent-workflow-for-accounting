@@ -34,6 +34,7 @@ export interface TaskQueueStats {
   name: string;
   active: number;
   waiting: number;
+  retrying: number;
   concurrency: number;
 }
 
@@ -43,6 +44,8 @@ export class TaskQueue {
   private readonly claimed = new Set<string>();
   private readonly idleWaiters: Array<() => void> = [];
   private active = 0;
+  /** Tasks sleeping between attempts: not active, not waiting, but not done. */
+  private backingOff = 0;
 
   constructor(private readonly options: TaskQueueOptions) {}
 
@@ -67,10 +70,14 @@ export class TaskQueue {
     };
   }
 
-  /** Resolves once nothing is queued or running. Used by scripts and tests. */
+  /** Resolves once nothing is queued, running or waiting to retry. */
   async idle(): Promise<void> {
-    if (this.active === 0 && this.waiting.length === 0) return;
+    if (this.isIdle) return;
     await new Promise<void>((resolve) => this.idleWaiters.push(resolve));
+  }
+
+  private get isIdle(): boolean {
+    return this.active === 0 && this.waiting.length === 0 && this.backingOff === 0;
   }
 
   private pump(): void {
@@ -104,7 +111,9 @@ export class TaskQueue {
 
       // Keep the key claimed across the wait so nothing else takes the slot.
       const delay = backoffMs(this.options.baseDelayMs ?? 400, task.attempt);
+      this.backingOff += 1;
       setTimeout(() => {
+        this.backingOff -= 1;
         this.waiting.push({ ...task, attempt: task.attempt + 1 });
         this.pump();
       }, delay).unref();
@@ -120,7 +129,7 @@ export class TaskQueue {
   }
 
   private settleIfIdle(): void {
-    if (this.active > 0 || this.waiting.length > 0) return;
+    if (!this.isIdle) return;
     while (this.idleWaiters.length > 0) this.idleWaiters.pop()?.();
   }
 }

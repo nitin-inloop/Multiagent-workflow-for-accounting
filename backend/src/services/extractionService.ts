@@ -107,4 +107,56 @@ export class ExtractionService {
     ]);
   }
 
+  /**
+   * The fast path: both readers on the same bytes at the same time, then a
+   * merge that gives each field to whichever reader is actually good at it.
+   */
+  private async extractInParallel(input: ExtractionInput): Promise<ExtractionOutcome> {
+    const textract = this.textract;
+    const gemini = this.gemini;
+    if (!textract || !gemini) throw new Error('Parallel extraction needs both readers');
+
+    const startedAt = Date.now();
+    const [ocr, vision] = await bothWithGrace(
+      textract.analyzeExpense(input.bytes),
+      gemini.extractFromDocument({ bytes: input.bytes, mimeType: input.mimeType }),
+      STRAGGLER_GRACE_MS,
+    );
+
+    logger.debug('Parallel extraction settled', {
+      ms: Date.now() - startedAt,
+      textract: describe(ocr),
+      gemini: describe(vision),
+    });
+
+    if (ocr.ok === true && vision.ok === true) {
+      return mergeReads(ocr.value, vision.value);
+    }
+
+    // One reader is out. Whatever is left is still a real extraction, so use it
+    // and say in the log which engine went missing and why.
+    const notes: string[] = [];
+    if (ocr.ok !== true) notes.push(`Textract ${reason(ocr, 'OCR')}.`);
+    if (vision.ok !== true) notes.push(`Gemini vision ${reason(vision, 'read')}.`);
+
+    if (ocr.ok === true) {
+      // Vision is gone, but the model itself may be fine - normalizing the OCR
+      // labels is a cheap text call and recovers most of what vision offered.
+      return this.normalizeOcr(ocr.value, notes);
+    }
+
+    if (vision.ok === true) {
+      return {
+        engine: 'GEMINI_VISION',
+        fields: vision.value.fields,
+        confidence: vision.value.confidence,
+        explanation: vision.value.explanation.length > 0 ? vision.value.explanation : null,
+        notes,
+        failed: false,
+      };
+    }
+
+    return this.sampleFallback(input.fileHash, [...notes, 'Fallback extraction used.']);
+  }
+
 // PLACEHOLDER_BODY

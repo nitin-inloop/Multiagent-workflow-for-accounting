@@ -736,5 +736,3 @@ exactly the two fields that could not be read.
   <b>LedgerFlow</b> · Team Logorhythms · Claude Impact Lab Hackathon<br/>
   <i>Three agents, one decision, and an audit trail behind every rupee.</i>
 </p>
- 
- 

@@ -448,8 +448,12 @@ Textract read.
 
 Each row states its verdict in words a reviewer can act on immediately — *GSTIN missing*, *total does
 not add up*, *interstate IGST*, *faded thermal print*, *duplicate resend* — and the tabs
-(`NEEDS REVIEW` · `READY` · `APPROVED` · `EXPORTED`) are a work queue rather than a filter. The
-connectors rail shows where bills arrive from and where the finished entry goes.
+(`NEEDS REVIEW` · `READY` · `APPROVED` · `EXPORTED`) are a work queue rather than a filter.
+
+At the bottom sits the connectors rail: WhatsApp Business, Gmail and Drive inbound, Tally and Zoho
+outbound. Each is labelled with its real state — *after pilot*, or *XML today, direct post later* —
+because the working upload → review → export path is the proof, and a fake OAuth badge would be the
+wrong kind of demo.
 
 ### The review page — one bill, one decision
 
@@ -576,7 +580,7 @@ Requirements: **Node.js 20+** and npm.
 cd backend
 cp .env.example .env          # Windows: copy .env.example .env
 npm install
-npm run seed                  # optional: load the six sample invoices
+npm run seed                  # optional: pre-fill the inbox with five samples
 npm run dev                   # http://localhost:8080
 
 # 2 — dashboard, in a second terminal
@@ -710,8 +714,9 @@ curl -X POST http://localhost:8080/api/documents/<id>/export/tally \
 ## 10. Demo scenarios
 
 Six realistic Bhopal-area supplier bills ship with the project, and between them they exercise every
-path through the three agents. They exist so a presentation never depends on a network call: run
-`npm run seed`, or load one from the upload panel.
+path through the three agents. They exist so a presentation never depends on a network call.
+`npm run seed` pre-fills the inbox with the first five — taking Arera Stationers all the way through
+approval and export — and any of the six can be loaded on demand from the upload panel.
 
 | Sample | What Agent 2 concludes | Why it is in the set |
 | --- | --- | --- |
